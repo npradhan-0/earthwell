@@ -5,47 +5,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EarthWell | Sustainable Living Companion</title>
     <link rel="stylesheet" href="/static/style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=Bebas+Neue&family=Oswald:wght@400;500;600;700&family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700&family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Animated Background -->
     <div class="gradient-bg">
         <div class="gradient-blob blob-1"></div>
         <div class="gradient-blob blob-2"></div>
         <div class="gradient-blob blob-3"></div>
     </div>
 
-    <!-- Main Content -->
     <div class="app-container">
-        <!-- Header with Centered Logo -->
         <header class="header">
             <div class="logo">
                 <div class="logo-icon">🌍</div>
-                <div class="logo-text">
-                    <h1>EarthWell</h1>
-                </div>
+                <div class="logo-text"><h1>EarthWell</h1></div>
             </div>
             <div class="badge">AI-Powered</div>
         </header>
 
-        <!-- Hero Section -->
         <div class="hero">
             <p class="hero-subtitle">Your friendly guide to sustainable living, wherever you go</p>
             <h2 class="hero-title">Travel or move with sustainability in mind.</h2>
         </div>
 
-        <!-- Input Card -->
         <div class="card input-card">
             <div class="input-group">
-                <label for="cityInput">
-                    <span class="label-icon">📍</span>
-                    Enter a city
-                </label>
+                <label><span class="label-icon">📍</span> Enter a city</label>
                 <div class="search-wrapper">
-                    <input type="text"
-                           id="cityInput"
-                           placeholder="e.g., Tokyo, Berlin, Barcelona, Singapore"
-                           autocomplete="off">
+                    <input type="text" id="cityInput" placeholder="e.g., Tokyo, Berlin, Barcelona" autocomplete="off">
                     <button id="clearBtn" class="clear-btn" style="display: none;">✕</button>
                 </div>
             </div>
@@ -72,36 +59,27 @@
             </button>
         </div>
 
-        <!-- Loading State -->
         <div id="loading" class="loading-container hidden">
             <div class="loading-card">
                 <div class="loading-spinner"></div>
-                <div class="loading-text">Analyzing sustainability data for <span id="loadingCity"></span>...</div>
+                <div class="loading-text">Analyzing data for <span id="loadingCity"></span>...</div>
                 <div class="loading-steps">
                     <div class="step">📍 Finding local resources</div>
-                    <div class="step">♻️ Analyzing recycling systems</div>
-                    <div class="step">🚲 Mapping transport options</div>
+                    <div class="step">♻️ Analyzing recycling</div>
+                    <div class="step">🚲 Mapping transport</div>
                 </div>
             </div>
         </div>
 
-        <!-- Result Section -->
         <div id="result" class="result-container hidden">
             <div class="result-header">
                 <div class="result-city">
                     <span class="city-emoji">🌿</span>
-                    <div>
-                        <h3>Sustainability Guide for</h3>
-                        <h2 id="cityName"></h2>
-                    </div>
+                    <div><h3>Sustainability Guide for</h3><h2 id="cityName"></h2></div>
                 </div>
                 <div class="result-actions">
-                    <button onclick="copyToClipboard()" class="action-btn copy-btn">
-                        📋 Copy
-                    </button>
-                    <button onclick="downloadGuide()" class="action-btn download-btn">
-                        📥 Download
-                    </button>
+                    <button onclick="copyToClipboard()" class="action-btn copy-btn">📋 Copy</button>
+                    <button onclick="downloadGuide()" class="action-btn download-btn">📥 Download</button>
                 </div>
             </div>
             <div class="guide-content" id="guideContent"></div>
@@ -114,210 +92,83 @@
             </div>
         </div>
 
-        <!-- Error State -->
         <div id="error" class="error-container hidden">
             <div class="error-card">
                 <div class="error-emoji">😕</div>
-                <h3>Oops! Something went wrong</h3>
+                <h3>Something went wrong</h3>
                 <p id="errorMessage"></p>
                 <button onclick="dismissError()" class="retry-btn">Try Again</button>
             </div>
         </div>
 
-        <!-- Footer -->
-        <footer class="footer">
-            <p>🌱 Empowering sustainable choices, anywhere in the world</p>
-        </footer>
+        <footer class="footer"><p>🌱 Empowering sustainable choices, anywhere in the world</p></footer>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('EarthWell loaded!');
-
-            let currentMode = 'travel';
-            let currentGuide = '';
-            let currentCity = '';
-
+            let currentMode = 'travel', currentGuide = '', currentCity = '';
             const cityInput = document.getElementById('cityInput');
             const clearBtn = document.getElementById('clearBtn');
             const generateBtn = document.getElementById('generateBtn');
             const travelModeBtn = document.getElementById('travelModeBtn');
             const moveModeBtn = document.getElementById('moveModeBtn');
 
-            if (travelModeBtn) {
-                travelModeBtn.addEventListener('click', () => {
-                    travelModeBtn.classList.add('active');
-                    moveModeBtn.classList.remove('active');
-                    currentMode = 'travel';
-                    console.log('Mode set to: TRAVEL');
-                });
-            }
-
-            if (moveModeBtn) {
-                moveModeBtn.addEventListener('click', () => {
-                    moveModeBtn.classList.add('active');
-                    travelModeBtn.classList.remove('active');
-                    currentMode = 'move';
-                    console.log('Mode set to: MOVE');
-                });
-            }
-
-            if (cityInput && clearBtn) {
-                cityInput.addEventListener('input', () => {
-                    clearBtn.style.display = cityInput.value ? 'flex' : 'none';
-                });
-
-                clearBtn.addEventListener('click', () => {
-                    cityInput.value = '';
-                    clearBtn.style.display = 'none';
-                    cityInput.focus();
-                });
-            }
-
-            if (cityInput) {
-                cityInput.addEventListener('keypress', (e) => {
-                    if (e.key === 'Enter') {
-                        getGuide();
-                    }
-                });
-            }
-
-            if (generateBtn) {
-                generateBtn.addEventListener('click', function() {
-                    getGuide();
-                });
-            }
+            if (travelModeBtn) travelModeBtn.onclick = () => { travelModeBtn.classList.add('active'); moveModeBtn.classList.remove('active'); currentMode = 'travel'; };
+            if (moveModeBtn) moveModeBtn.onclick = () => { moveModeBtn.classList.add('active'); travelModeBtn.classList.remove('active'); currentMode = 'move'; };
+            if (cityInput) cityInput.oninput = () => { clearBtn.style.display = cityInput.value ? 'flex' : 'none'; };
+            if (clearBtn) clearBtn.onclick = () => { cityInput.value = ''; clearBtn.style.display = 'none'; cityInput.focus(); };
+            if (cityInput) cityInput.onkeypress = (e) => { if (e.key === 'Enter') getGuide(); };
+            if (generateBtn) generateBtn.onclick = () => getGuide();
 
             async function getGuide() {
-                const city = cityInput ? cityInput.value.trim() : '';
-
-                if (!city) {
-                    showError('Please enter a city name');
-                    return;
-                }
-
+                const city = cityInput.value.trim();
+                if (!city) { showError('Please enter a city'); return; }
                 currentCity = city;
-
-                const loadingCitySpan = document.getElementById('loadingCity');
-                if (loadingCitySpan) loadingCitySpan.textContent = city;
-
-                const loadingDiv = document.getElementById('loading');
-                const resultDiv = document.getElementById('result');
-                const errorDiv = document.getElementById('error');
-
-                if (loadingDiv) loadingDiv.classList.remove('hidden');
-                if (resultDiv) resultDiv.classList.add('hidden');
-                if (errorDiv) errorDiv.classList.add('hidden');
+                document.getElementById('loadingCity').textContent = city;
+                document.getElementById('loading').classList.remove('hidden');
+                document.getElementById('result').classList.add('hidden');
+                document.getElementById('error').classList.add('hidden');
 
                 const steps = document.querySelectorAll('.loading-steps .step');
                 let stepIndex = 0;
-                const stepInterval = setInterval(() => {
-                    if (stepIndex < steps.length) {
-                        steps[stepIndex].style.opacity = '1';
-                        stepIndex++;
-                    }
-                }, 800);
+                const stepInterval = setInterval(() => { if (stepIndex < steps.length) steps[stepIndex++].style.opacity = '1'; }, 800);
 
                 try {
                     const response = await fetch('/get_guide', {
                         method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            city: city,
-                            mode: currentMode
-                        })
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ city, mode: currentMode })
                     });
-
                     const data = await response.json();
-
                     if (data.success) {
                         currentGuide = data.guide;
-                        displayGuide(data.city, data.guide);
-                    } else {
-                        showError(data.error || 'Something went wrong');
-                    }
-                } catch (error) {
-                    console.error('Error:', error);
-                    showError('Network error: ' + error.message);
-                } finally {
-                    clearInterval(stepInterval);
-                    if (loadingDiv) loadingDiv.classList.add('hidden');
-                }
+                        displayGuide(data.city, data.guide, data.carbon, data.air_quality);
+                    } else showError(data.error || 'Something went wrong');
+                } catch (error) { showError('Network error: ' + error.message); }
+                finally { clearInterval(stepInterval); document.getElementById('loading').classList.add('hidden'); }
             }
 
-            function displayGuide(city, guideText) {
-                const cityNameSpan = document.getElementById('cityName');
-                const guideContentDiv = document.getElementById('guideContent');
-                const resultDiv = document.getElementById('result');
-
-                if (cityNameSpan) cityNameSpan.textContent = city;
-
-                let html = guideText
-                    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                    .replace(/^### (.*?)$/gm, '<h3>$1</h3>')
-                    .replace(/^## (.*?)$/gm, '<h2>$1</h2>')
-                    .replace(/^# (.*?)$/gm, '<h1>$1</h1>')
-                    .replace(/^- (.*?)$/gm, '<li>$1</li>')
-                    .replace(/• (.*?)$/gm, '<li>$1</li>')
-                    .replace(/\n\n/g, '</p><p>')
-                    .replace(/\n/g, '<br>');
-
+            function displayGuide(city, guideText, carbon, air) {
+                document.getElementById('cityName').textContent = city;
+                let badges = '';
+                if (carbon) badges += `<div style="background:#e8f5e9; border-radius:16px; padding:16px; margin-bottom:16px; border-left:4px solid #2ecc71;"><div style="display:flex; justify-content:space-between;"><span>🌍 Carbon Savings</span><span style="color:#2ecc71; font-weight:bold;">${carbon.savings_kg || carbon.savings_tons} ${carbon.savings_kg ? 'kg CO₂/day' : 'tons CO₂/year'}</span></div><p style="font-size:13px; margin-top:8px;">${carbon.message}</p></div>`;
+                if (air) {
+                    const color = air.aqi <= 50 ? '#2ecc71' : air.aqi <= 100 ? '#f39c12' : '#e74c3c';
+                    badges += `<div style="background:#e3f2fd; border-radius:16px; padding:16px; margin-bottom:16px; border-left:4px solid ${color};"><div style="display:flex; justify-content:space-between;"><span>💨 Air Quality</span><span style="color:${color}; font-weight:bold;">AQI: ${air.aqi} ${air.level}</span></div><p style="font-size:13px; margin-top:8px;">${air.message}</p><p style="font-size:12px; margin-top:8px;">🌡️ ${air.temperature}°C</p></div>`;
+                }
+                let html = guideText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/^### (.*?)$/gm, '<h3>$1</h3>').replace(/^## (.*?)$/gm, '<h2>$1</h2>').replace(/^- (.*?)$/gm, '<li>$1</li>').replace(/• (.*?)$/gm, '<li>$1</li>').replace(/\n\n/g, '</p><p>').replace(/\n/g, '<br>');
                 html = html.replace(/(<li>.*?<\/li>)/gs, '<ul>$1</ul>');
-
-                if (guideContentDiv) guideContentDiv.innerHTML = html;
-                if (resultDiv) resultDiv.classList.remove('hidden');
-
-                if (resultDiv) {
-                    resultDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
+                document.getElementById('guideContent').innerHTML = badges + html;
+                document.getElementById('result').classList.remove('hidden');
+                document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
             }
 
-            window.copyToClipboard = function() {
-                navigator.clipboard.writeText(currentGuide);
-                const btn = document.querySelector('.copy-btn');
-                if (btn) {
-                    const originalText = btn.innerHTML;
-                    btn.innerHTML = '✅ Copied!';
-                    setTimeout(() => {
-                        btn.innerHTML = originalText;
-                    }, 2000);
-                }
-            };
-
-            window.downloadGuide = function() {
-                const content = `EarthWell Sustainability Guide for ${currentCity}\n\n${currentGuide}\n\nGenerated by EarthWell - Sustainable Living Companion`;
-                const blob = new Blob([content], { type: 'text/plain' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `earthwell-${currentCity.toLowerCase()}-guide.txt`;
-                a.click();
-                URL.revokeObjectURL(url);
-            };
-
-            window.feedback = function(type) {
-                const message = type === 'helpful'
-                    ? 'Thanks for your feedback! 🌱'
-                    : 'Sorry it wasn\'t helpful. We\'re improving!';
-                alert(message);
-            };
-
-            window.showError = function(message) {
-                const errorMessageSpan = document.getElementById('errorMessage');
-                const errorDiv = document.getElementById('error');
-                if (errorMessageSpan) errorMessageSpan.textContent = message;
-                if (errorDiv) errorDiv.classList.remove('hidden');
-            };
-
-            window.dismissError = function() {
-                const errorDiv = document.getElementById('error');
-                if (errorDiv) errorDiv.classList.add('hidden');
-            };
+            window.copyToClipboard = () => { navigator.clipboard.writeText(currentGuide); const btn = document.querySelector('.copy-btn'); const original = btn.innerHTML; btn.innerHTML = '✅ Copied!'; setTimeout(() => btn.innerHTML = original, 2000); };
+            window.downloadGuide = () => { const blob = new Blob([`EarthWell Guide for ${currentCity}\n\n${currentGuide}`], { type: 'text/plain' }); const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `earthwell-${currentCity.toLowerCase()}.txt`; a.click(); URL.revokeObjectURL(blob); };
+            window.feedback = (type) => alert(type === 'helpful' ? 'Thanks! 🌱' : "We'll improve!");
+            window.showError = (msg) => { document.getElementById('errorMessage').textContent = msg; document.getElementById('error').classList.remove('hidden'); };
+            window.dismissError = () => document.getElementById('error').classList.add('hidden');
         });
     </script>
 </body>
 </html>
-
-
