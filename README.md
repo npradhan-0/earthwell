@@ -44,5 +44,5 @@ EarthWell is a web application that generates instant, city-specific sustainabil
 
 1. **Clone the repository**
 ```bash
-git clone https://github.com/yourusername/earthwell.git
+git clone https://github.com/npradhan-0/earthwell.git
 cd earthwell
