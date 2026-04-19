@@ -141,3 +141,6 @@ def get_guide():
 if __name__ == '__main__':
     print("🌍 EarthWell Starting with Groq...")
     app.run(debug=True)
+
+
+
